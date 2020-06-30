@@ -1,8 +1,7 @@
 #pragma once
-#include "Menu.h"
-#include "MouseTracker.h"
+#include "ExtendedMenu.h"
 
-class TitresMenu : public Menu
+class TitresMenu : public ExtendedMenu
 {
 public:
 	TitresMenu();

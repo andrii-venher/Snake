@@ -6,5 +6,5 @@ struct GameSettings
 {
 	Field* field;
 	unsigned int sleepTime;
-	SnakeChar snakeChar;
+	SnakeChars snakeChar;
 };

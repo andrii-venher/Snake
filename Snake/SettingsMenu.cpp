@@ -1,74 +1,17 @@
 #include "SettingsMenu.h"
 
-void SettingsMenu::Show()
-{
-	system("cls");
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	for (int i = 0; i < table.size(); i++)
-	{
-		for (int j = 0; j < table[i].size(); j++)
-		{
-			SetConsoleCursorPosition(h, table[i][j].c);
-			if (table[i][j].isPressed)
-			{
-				SetConsoleTextAttribute(h, 10);
-			}
-			else
-			{
-				SetConsoleTextAttribute(h, 7);
-			}
-			cout << table[i][j].title;
-		}
-	}
-	SetConsoleTextAttribute(h, 7);
-}
-
-void SettingsMenu::Add(const vector<MenuElement> row)
-{
-	table.push_back(row);
-}
-
-MatrixIndex SettingsMenu::ClickedElement()
-{
-	COORD click = click_coordinate();
-	MatrixIndex index = { -1, -1 };
-	for (int i = 0; i < table.size(); i++)
-	{
-		for (int j = 0; j < table[i].size(); j++)
-		{
-			if (click.Y == table[i][j].c.Y && click.X >= table[i][j].c.X && click.X <= table[i][j].c.X + table[i][j].title.length())
-			{
-				index = { i, j };
-				return index;
-			}
-		}
-	}
-	return index;
-}
-
-void SettingsMenu::TossPressedElement(MatrixIndex index)
-{
-	for (int k = 0; k < table[index.i].size(); k++)
-	{
-		if (table[index.i][k].isPressed)
-			table[index.i][k].isPressed = false;
-	}
-	table[index.i][index.j].isPressed = true;
-}
-
-SnakeChar SettingsMenu::CharToSnakeChar(char ch)
+SnakeChars SettingsMenu::CharToSnakeChar(char ch)
 {
 	switch (ch)
 	{
 	case '*':
-		return SnakeChar::STAR;
+		return SnakeChars::STAR;
 	case '&':
-		return SnakeChar::AMPERSANT;
+		return SnakeChars::AMPERSANT;
 	case '#':
-		return SnakeChar::HASHTAG;
+		return SnakeChars::HASHTAG;
 	default:
-		return SnakeChar::STAR;
+		return SnakeChars::STAR;
 	}
 }
 
@@ -90,94 +33,117 @@ SleepTime SettingsMenu::IntToSleepTime(int sleepTime)
 SettingsMenu::SettingsMenu(GameSettings* settings)
 {
 	this->settings = settings;
-	vector<MenuElement> temp;
+	SetHeader({ "SETTINGS", {5, 0}, MENU_ELEMENT_TYPE::LABEL, false });
+	SetEnding({ "BACK", {5, 5}, MENU_ELEMENT_TYPE::EXIT, false });
 
-	temp.push_back({ "field: ", {0,0}, false });
-	temp.push_back({ "first", {0,0}, false });
-	temp.push_back({ "second", {0,0}, false });
-	for (int i = 1; i < 3; i++)
+	MenuRow row;
+
+	row.name = { "first", {0,1}, MENU_ELEMENT_TYPE::LABEL, false };
+	row.values.push_back({ "first", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	row.values.push_back({ "second", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	for (int i = 0; i < row.values.size(); i++)
 	{
-		temp[i].c.Y = temp[i - 1].c.Y;
-		temp[i].c.X = temp[i - 1].c.X + temp[i - 1].title.length() + 2;
-		temp[i].isPressed = settings->field->GetFieldNumber() == i - 1;
+		row.values[i].c.Y = row.name.c.Y;
+		if (i == 0)
+		{
+			row.values[i].c.X = row.name.c.X + row.name.title.length() + 2;
+		}
+		else
+		{
+			row.values[i].c.X = row.values[i - 1].c.X + row.values[i - 1].title.length() + 2;
+		}
+		row.values[i].isPressed = settings->field->GetFieldNumber() == i;
 	}
-	Add(temp);
-	temp.erase(temp.begin(), temp.end());
+	AddRow(row);
+	row.Clear();
 
-	temp.push_back({ "speed: ", {0,1}, false });
-	temp.push_back({ "slow", {0,0}, false });
-	temp.push_back({ "medium", {0,0}, false });
-	temp.push_back({ "fast", {0,0}, false });
-	for (int i = 1; i < 4; i++)
+	row.name = { "speed: ", {0,2}, MENU_ELEMENT_TYPE::LABEL, false };
+	row.values.push_back({ "slow", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	row.values.push_back({ "medium", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	row.values.push_back({ "fast", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	for (int i = 0; i < row.values.size(); i++)
 	{
-		temp[i].c.Y = temp[i - 1].c.Y;
-		temp[i].c.X = temp[i - 1].c.X + temp[i - 1].title.length() + 2;
+		row.values[i].c.Y = row.name.c.Y;
+		if (i == 0)
+		{
+			row.values[i].c.X = row.name.c.X + row.name.title.length() + 2;
+		}
+		else
+		{
+			row.values[i].c.X = row.values[i - 1].c.X + row.values[i - 1].title.length() + 2;
+		}
 	}
 	switch (IntToSleepTime(settings->sleepTime))
 	{
 	case SleepTime::SLOW:
-		temp[1].isPressed = true;
+		row.values[0].isPressed = true;
 		break;
 	case SleepTime::MEDIUM:
-		temp[2].isPressed = true;
+		row.values[1].isPressed = true;
 		break;
 	case SleepTime::FAST:
-		temp[3].isPressed = true;
+		row.values[2].isPressed = true;
 		break;
 	default:
-		temp[0].isPressed = true;
+		row.values[0].isPressed = true;
 		break;
 	}
-	Add(temp);
-	temp.erase(temp.begin(), temp.end());
+	AddRow(row);
+	row.Clear();
 
-	temp.push_back({ "snake char: ", {0,2}, false });
-	temp.push_back({ "*", {0,0}, false });
-	temp.push_back({ "&", {0,0}, false });
-	temp.push_back({ "#", {0,0}, false });
-	for (int i = 1; i < 4; i++)
+	row.name = { "snake char: ", {0,3}, MENU_ELEMENT_TYPE::LABEL, false };
+	row.values.push_back({ "*", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	row.values.push_back({ "&", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	row.values.push_back({ "#", {0,0}, MENU_ELEMENT_TYPE::BUTTON, false });
+	for (int i = 0; i < row.values.size(); i++)
 	{
-		temp[i].c.Y = temp[i - 1].c.Y;
-		temp[i].c.X = temp[i - 1].c.X + temp[i - 1].title.length() + 2;
+		row.values[i].c.Y = row.name.c.Y;
+		if (i == 0)
+		{
+			row.values[i].c.X = row.name.c.X + row.name.title.length() + 2;
+		}
+		else
+		{
+			row.values[i].c.X = row.values[i - 1].c.X + row.values[i - 1].title.length() + 2;
+		}
 	}
-	switch (CharToSnakeChar(settings->snakeChar))
+	switch (settings->snakeChar)
 	{
-	case SnakeChar::STAR:
-		temp[1].isPressed = true;
+	case SnakeChars::STAR:
+		row.values[0].isPressed = true;
 		break;
-	case SnakeChar::AMPERSANT:
-		temp[2].isPressed = true;
+	case SnakeChars::AMPERSANT:
+		row.values[1].isPressed = true;
 		break;
-	case SnakeChar::HASHTAG:
-		temp[3].isPressed = true;
+	case SnakeChars::HASHTAG:
+		row.values[2].isPressed = true;
 		break;
 	default:
-		temp[0].isPressed = true;
+		row.values[0].isPressed = true;
 		break;
 	}
-	Add(temp);
-	temp.erase(temp.begin(), temp.end());
-
-	temp.push_back({ "back", {0, 3}, false });
-	Add(temp);
+	AddRow(row);
+	row.Clear();
 }
 
 void SettingsMenu::Interact()
 {
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
 	{
-		MatrixIndex index = ClickedElement();
-		switch (index.i)
+		MenuElement clickedEl = ClickedElement();
+		if (clickedEl.type == MENU_ELEMENT_TYPE::EXIT)
+			return;
+		MatrixIndex buttonIndex = GetElementIndex(clickedEl);
+		switch (buttonIndex.row)
 		{
 		case 0:
 		{
-			switch (index.j)
+			switch (buttonIndex.col)
 			{
+			case 0:
 			case 1:
-			case 2:
 				delete settings->field;
-				settings->field = new Field(index.j - 1);
+				settings->field = new Field(buttonIndex.col);
 				break;
 			default:
 				break;
@@ -186,15 +152,15 @@ void SettingsMenu::Interact()
 		}
 		case 1:
 		{
-			switch (index.j)
+			switch (buttonIndex.col)
 			{
-			case 1:
+			case 0:
 				settings->sleepTime = SleepTime::SLOW;
 				break;
-			case 2:
+			case 1:
 				settings->sleepTime = SleepTime::MEDIUM;
 				break;
-			case 3:
+			case 2:
 				settings->sleepTime = SleepTime::FAST;
 				break;
 			default:
@@ -204,30 +170,28 @@ void SettingsMenu::Interact()
 		}
 		case 2:
 		{
-			switch (index.j)
+			switch (buttonIndex.col)
 			{
+			case 0:
+				settings->snakeChar = SnakeChars::STAR;
+				break;
 			case 1:
-				settings->snakeChar = SnakeChar::STAR;
+				settings->snakeChar = SnakeChars::AMPERSANT;
 				break;
 			case 2:
-				settings->snakeChar = SnakeChar::AMPERSANT;
-				break;
-			case 3:
-				settings->snakeChar = SnakeChar::HASHTAG;
+				settings->snakeChar = SnakeChars::HASHTAG;
 				break;
 			default:
 				break;
 			}
 			break;
 		}	
-		case 3:
-			return;
 		default:
 			break;
 		}
-		if (index.i != -1)
+		if (buttonIndex.row != -1)
 		{
-			TossPressedElement(index);
+			TossPressedElement(buttonIndex);
 			Show();
 		}
 	}

@@ -25,9 +25,9 @@ Field::Field(int number)
 			for (int j = 0; j < width; j++)
 			{
 				if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
-					field[i][j] = WALL;
+					field[i][j] = FieldObjects::WALL;
 				else
-					field[i][j] = EMPTY;
+					field[i][j] = FieldObjects::EMPTY;
 			}
 		}
 		break;
@@ -41,9 +41,9 @@ Field::Field(int number)
 					(i == height * 3 / 4 && j > width / 4 && j < width * 3 / 4) ||
 					(j == width / 6 && i > height / 4 && i < height * 3 / 4) ||
 					(j == width * 5 / 6 && i > height / 4 && i < height * 3 / 4))
-					field[i][j] = WALL;
+					field[i][j] = FieldObjects::WALL;
 				else
-					field[i][j] = EMPTY;
+					field[i][j] = FieldObjects::EMPTY;
 			}
 		}
 		break;
@@ -74,7 +74,7 @@ void Field::Print() const
 		{
 			
 			SetConsoleCursorPosition(h, c);
-			if (field[i][j] == WALL)
+			if (field[i][j] == FieldObjects::WALL)
 			{
 
 				SetConsoleTextAttribute(h, 255);

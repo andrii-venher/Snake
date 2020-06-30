@@ -21,9 +21,6 @@
     <ClCompile Include="GameProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Snake.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,12 +39,12 @@
     <ClCompile Include="TitresMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExtendedMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProcess.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Snake.h">
@@ -72,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TitresMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendedMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

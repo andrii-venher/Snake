@@ -23,7 +23,7 @@ void GameProcess::CheckRotation()
 	int key;
 	if (_kbhit()) {
 		key = _getch();
-		if (key == ARROW) {
+		if (key == (int)Keys::ARROW) {
 			key = _getch();
 		}
 	}
@@ -33,19 +33,19 @@ void GameProcess::CheckRotation()
 	}
 	switch (key)
 	{
-	case UPPERARROW:
+	case (int)Keys::UPPERARROW:
 		if(snake->GetDir() != DOWN)
 			snake->SetDir(UP);
 		break;
-	case RIGHTARROW:
+	case (int)Keys::RIGHTARROW:
 		if (snake->GetDir() != LEFT)
 			snake->SetDir(RIGHT);
 		break;
-	case DOWNARROW:
+	case (int)Keys::DOWNARROW:
 		if (snake->GetDir() != UP)
 			snake->SetDir(DOWN);
 		break;
-	case LEFTARROW:
+	case (int)Keys::LEFTARROW:
 		if (snake->GetDir() != RIGHT)
 			snake->SetDir(LEFT);
 		break;
@@ -58,7 +58,7 @@ void GameProcess::CheckRotation()
 
 bool GameProcess::CheckLose()
 {
-	if (snake->CheckCrash() || (*settings.field)(snake->Head().Y, snake->Head().X) == WALL)
+	if (snake->CheckCrash() || (*settings.field)(snake->Head().Y, snake->Head().X) == FieldObjects::WALL)
 	{
 		MessageBoxA(0, "YOU LOST!", "GAMEOVER", MB_OK);
 		return true;
@@ -69,11 +69,11 @@ bool GameProcess::CheckLose()
 
 void GameProcess::CheckGrow()
 {
-	if ((*settings.field)(snake->Head().Y, snake->Head().X) == EGG)
+	if ((*settings.field)(snake->Head().Y, snake->Head().X) == FieldObjects::EGG)
 	{
 		snake->Grow();
 		info->score++;
-		(*settings.field)(snake->Head().Y, snake->Head().X) = EMPTY;
+		(*settings.field)(snake->Head().Y, snake->Head().X) = FieldObjects::EMPTY;
 		SpawnEgg();
 	}
 }
@@ -96,11 +96,11 @@ void GameProcess::SpawnEgg()
 		short x = rand() % (settings.field->GetWidth() - 1) + 1;
 		short y = rand() % (settings.field->GetHeight() - 1) + 1;
 		
-		if ((*settings.field)(y, x) != WALL &&
+		if ((*settings.field)(y, x) != FieldObjects::WALL &&
 			pow(x - snake->Head().X, 2) + pow(y - snake->Head().Y, 2) > radius &&
 			pow(x - snake->Tail().X, 2) + pow(y - snake->Tail().Y, 2) > radius)
 		{
-			(*settings.field)(y, x) = EGG;
+			(*settings.field)(y, x) = FieldObjects::EGG;
 			SetConsoleCursorPosition(h, { x, y });
 			cout << "$";
 			break;

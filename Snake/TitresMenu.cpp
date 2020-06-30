@@ -2,21 +2,20 @@
 
 TitresMenu::TitresMenu()
 {
-	Add({ "creator - Venger Andrey", {0,0}, false });
-	Add({ "back", {0,1}, false });
+	SetHeader({ "TITRES", {5, 0}, MENU_ELEMENT_TYPE::LABEL, false });
+	MenuRow row;
+	row.name = { "Created by Andrey Venger", {0, 1}, MENU_ELEMENT_TYPE::LABEL, false };
+	AddRow(row);
+	SetEnding({ "BACK", {5, 3}, MENU_ELEMENT_TYPE::EXIT, false });
 }
 
 void TitresMenu::Interact()
 {
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
 	{
-		int index = ClickedElement();
-		switch (index)
-		{
-		case 1:
+		MenuElement clickedEl = ClickedElement();
+		if (clickedEl.type == MENU_ELEMENT_TYPE::EXIT)
 			return;
-		default:
-			break;
-		}
 	}
 }

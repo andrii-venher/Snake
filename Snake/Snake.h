@@ -13,9 +13,9 @@ class Snake
 {
 	vector<COORD> body;
 	DIRECTIONS dir;
-	SnakeChar snakeChar;
+	SnakeChars snakeChar;
 public:
-	Snake(COORD head, SnakeChar snakeChar);
+	Snake(COORD head, SnakeChars snakeChar);
 	void Paint();
 	void Move();
 	bool CheckCrash();

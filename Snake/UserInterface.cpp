@@ -17,13 +17,25 @@ UserInterface::UserInterface()
 {
 	settings = new GameSettings;
 	settings->sleepTime = 200;
-	settings->snakeChar = SnakeChar::STAR;
+	settings->snakeChar = SnakeChars::STAR;
 	settings->field = new Field();
 
-	Add({ "new game", { 0, 0 }, false });
-	Add({ "settings", { 0, 1 }, false });
-	Add({ "about game", { 0, 2 }, false });
-	Add({ "exit", { 0, 3 }, false });
+	SetHeader({ "SNAKE", { 5, 0 }, MENU_ELEMENT_TYPE::LABEL, false });
+	SetEnding({ "EXIT", { 5, 5 }, MENU_ELEMENT_TYPE::EXIT, false });
+
+	MenuRow row;
+
+	row.values.push_back({ "new game", { 0, 1 }, MENU_ELEMENT_TYPE::BUTTON, false });
+	AddRow(row);
+	row.Clear();
+
+	row.values.push_back({ "settings", { 0, 2 }, MENU_ELEMENT_TYPE::BUTTON, false });
+	AddRow(row);
+	row.Clear();
+
+	row.values.push_back({ "about game", { 0, 3 }, MENU_ELEMENT_TYPE::BUTTON, false });
+	AddRow(row);
+	row.Clear();
 
 	Init();
 
@@ -34,8 +46,11 @@ void UserInterface::Interact()
 {
 	while (true)
 	{
-		int index = ClickedElement();
-		switch (index)
+		MenuElement clickedEl = ClickedElement();
+		if (clickedEl.type == MENU_ELEMENT_TYPE::EXIT)
+			exit(0);
+		MatrixIndex buttonIndex = GetElementIndex(clickedEl);
+		switch (buttonIndex.row)
 		{
 		case 0:
 			process = new GameProcess(settings);
@@ -58,8 +73,6 @@ void UserInterface::Interact()
 			delete titres;
 			Show();
 			break;
-		case 3:
-			exit(0);
 		default:
 			break;
 		}

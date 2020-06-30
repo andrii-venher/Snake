@@ -1,6 +1,6 @@
 #include "Snake.h"
 
-Snake::Snake(COORD head, SnakeChar snakeChar)
+Snake::Snake(COORD head, SnakeChars snakeChar)
 {
 	body.push_back(head);
 	body.push_back({ head.X - 1, head.Y });
@@ -14,9 +14,9 @@ void Snake::Paint()
 	for (int i = 0; i < body.size(); i++)
 	{
 		if (body[i].X == Head().X && body[i].Y == Head().Y)
-			SetConsoleTextAttribute(h, 4);
+			SetConsoleTextAttribute(h, (int)Colors::RED);
 		else
-			SetConsoleTextAttribute(h, 7);
+			SetConsoleTextAttribute(h, (int)Colors::WHITE);
 		SetConsoleCursorPosition(h, body[i]);
 		cout << (char)snakeChar;
 	}
@@ -31,7 +31,7 @@ void Snake::Move()
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SetConsoleCursorPosition(h, Tail());
-	SetConsoleTextAttribute(h, 7);
+	SetConsoleTextAttribute(h, (int)Colors::WHITE);
 	cout << " ";
 
 	for (int i = body.size() - 1; i > 0; i--)
@@ -58,10 +58,10 @@ void Snake::Move()
 	}
 
 	SetConsoleCursorPosition(h, Head());
-	SetConsoleTextAttribute(h, 4);
+	SetConsoleTextAttribute(h, (int)Colors::RED);
 	cout << (char)snakeChar;
 	SetConsoleCursorPosition(h, body[1]);
-	SetConsoleTextAttribute(h, 7);
+	SetConsoleTextAttribute(h, (int)Colors::WHITE);
 	cout << (char)snakeChar;
 }
 

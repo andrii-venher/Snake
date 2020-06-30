@@ -139,9 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ExtendedMenu.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="GameProcess.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MouseTracker.cpp" />
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="Snake.cpp" />
@@ -150,11 +150,11 @@
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExtendedMenu.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="GameProcess.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="Menu.h" />
     <ClInclude Include="MouseTracker.h" />
     <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="Snake.h" />

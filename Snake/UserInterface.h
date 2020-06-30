@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Menu.h"
+#include "ExtendedMenu.h"
 #include "GameProcess.h"
 #include "SettingsMenu.h"
 #include "GameSettings.h"
 #include "TitresMenu.h"
 
-class UserInterface : public Menu
+class UserInterface : public ExtendedMenu
 {
 	GameProcess* process;
 	SettingsMenu* settingMenu;
